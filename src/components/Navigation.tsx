@@ -1,6 +1,7 @@
 
 import { useState } from 'react';
 import { Search, ShoppingCart, User, Menu, X } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
@@ -8,10 +9,10 @@ const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const menuItems = [
-    'Furniture',
-    'Kitchenware',
-    'Décor', 
-    'Handcrafted'
+    { name: 'Furniture', href: '/products?category=furniture' },
+    { name: 'Kitchenware', href: '/products?category=kitchenware' },
+    { name: 'Décor', href: '/products?category=decor' },
+    { name: 'Handcrafted', href: '/products?category=handcrafted' }
   ];
 
   return (
@@ -20,20 +21,23 @@ const Navigation = () => {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex items-center">
-            <h1 className="text-2xl font-playfair font-bold text-treen-800">
-              Treen
-            </h1>
+            <Link to="/">
+              <h1 className="text-2xl font-playfair font-bold text-treen-800">
+                Treen
+              </h1>
+            </Link>
           </div>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
             {menuItems.map((item) => (
-              <button
-                key={item}
+              <Link
+                key={item.name}
+                to={item.href}
                 className="text-treen-700 hover:text-treen-900 transition-colors duration-200 font-medium"
               >
-                {item}
-              </button>
+                {item.name}
+              </Link>
             ))}
           </div>
 
@@ -50,9 +54,11 @@ const Navigation = () => {
 
           {/* Action Buttons */}
           <div className="flex items-center space-x-3">
-            <Button variant="ghost" size="icon" className="text-treen-700 hover:text-treen-900">
-              <User className="h-5 w-5" />
-            </Button>
+            <Link to="/login">
+              <Button variant="ghost" size="icon" className="text-treen-700 hover:text-treen-900">
+                <User className="h-5 w-5" />
+              </Button>
+            </Link>
             <Button variant="ghost" size="icon" className="text-treen-700 hover:text-treen-900 relative">
               <ShoppingCart className="h-5 w-5" />
               <span className="absolute -top-1 -right-1 bg-treen-bronze text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
@@ -87,12 +93,14 @@ const Navigation = () => {
               
               {/* Mobile Navigation Links */}
               {menuItems.map((item) => (
-                <button
-                  key={item}
+                <Link
+                  key={item.name}
+                  to={item.href}
                   className="text-left text-treen-700 hover:text-treen-900 py-2 font-medium"
+                  onClick={() => setIsMenuOpen(false)}
                 >
-                  {item}
-                </button>
+                  {item.name}
+                </Link>
               ))}
             </div>
           </div>

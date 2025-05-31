@@ -1,4 +1,5 @@
 
+import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 
 const HeroSection = () => {
@@ -24,19 +25,23 @@ const HeroSection = () => {
               Handcrafted wooden furniture that tells your story.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-              <Button 
-                size="lg" 
-                className="bg-treen-800 hover:bg-treen-900 text-white px-8 py-6 text-lg font-medium luxury-shadow-lg transition-all duration-300 hover:scale-105"
-              >
-                Discover More
-              </Button>
-              <Button 
-                variant="outline" 
-                size="lg"
-                className="border-treen-600 text-treen-800 hover:bg-treen-800 hover:text-white px-8 py-6 text-lg font-medium transition-all duration-300"
-              >
-                View Collection
-              </Button>
+              <Link to="/products">
+                <Button 
+                  size="lg" 
+                  className="bg-treen-800 hover:bg-treen-900 text-white px-8 py-6 text-lg font-medium luxury-shadow-lg transition-all duration-300 hover:scale-105"
+                >
+                  Discover More
+                </Button>
+              </Link>
+              <Link to="/products">
+                <Button 
+                  variant="outline" 
+                  size="lg"
+                  className="border-treen-600 text-treen-800 hover:bg-treen-800 hover:text-white px-8 py-6 text-lg font-medium transition-all duration-300"
+                >
+                  View Collection
+                </Button>
+              </Link>
             </div>
             
             {/* New Arrivals Badge */}
