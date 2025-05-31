@@ -1,294 +1,203 @@
 
 import { useState } from 'react';
-import { 
-  Users, 
-  Package, 
-  ShoppingCart, 
-  TrendingUp, 
-  Plus,
-  Search,
-  Filter,
-  MoreHorizontal,
-  Edit,
-  Trash2,
-  Eye
-} from 'lucide-react';
 import AdminLayout from '@/components/AdminLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Badge } from '@/components/ui/badge';
 
 const AdminDashboard = () => {
-  const [searchQuery, setSearchQuery] = useState('');
+  const [activeTab, setActiveTab] = useState('overview');
 
-  // Mock data
-  const stats = [
-    {
-      title: 'Total Users',
-      value: '2,847',
-      change: '+12%',
-      changeType: 'positive' as const,
-      icon: Users
-    },
-    {
-      title: 'Products Listed',
-      value: '1,234',
-      change: '+8%',
-      changeType: 'positive' as const,
-      icon: Package
-    },
-    {
-      title: 'Orders This Month',
-      value: '456',
-      change: '+23%',
-      changeType: 'positive' as const,
-      icon: ShoppingCart
-    },
-    {
-      title: 'Revenue',
-      value: '$127,540',
-      change: '+18%',
-      changeType: 'positive' as const,
-      icon: TrendingUp
-    }
+  const mockOrders = [
+    { id: 1, customer: 'John Doe', product: 'Oak Dining Table', amount: 1299, status: 'completed' },
+    { id: 2, customer: 'Jane Smith', product: 'Walnut Chair', amount: 459, status: 'pending' },
+    { id: 3, customer: 'Bob Johnson', product: 'Kitchen Set', amount: 189, status: 'shipped' }
   ];
 
-  const recentOrders = [
-    {
-      id: 'ORD-001',
-      customer: 'John Smith',
-      product: 'Premium Oak Table',
-      amount: '$1,299',
-      status: 'Shipped',
-      date: '2024-01-15'
-    },
-    {
-      id: 'ORD-002',
-      customer: 'Sarah Johnson',
-      product: 'Handcrafted Chair',
-      amount: '$459',
-      status: 'Processing',
-      date: '2024-01-14'
-    },
-    {
-      id: 'ORD-003',
-      customer: 'Mike Wilson',
-      product: 'Bamboo Kitchen Set',
-      amount: '$189',
-      status: 'Delivered',
-      date: '2024-01-13'
-    }
+  const mockProducts = [
+    { id: 1, name: 'Premium Oak Dining Table', price: 1299, stock: 5, category: 'furniture' },
+    { id: 2, name: 'Handcrafted Walnut Chair', price: 459, stock: 12, category: 'furniture' },
+    { id: 3, name: 'Bamboo Kitchen Set', price: 189, stock: 8, category: 'kitchenware' }
   ];
 
-  const products = [
-    {
-      id: 1,
-      name: 'Premium Oak Dining Table',
-      category: 'Furniture',
-      price: '$1,299',
-      stock: 12,
-      status: 'Active'
-    },
-    {
-      id: 2,
-      name: 'Handcrafted Walnut Chair',
-      category: 'Furniture',
-      price: '$459',
-      stock: 8,
-      status: 'Active'
-    },
-    {
-      id: 3,
-      name: 'Bamboo Kitchen Set',
-      category: 'Kitchenware',
-      price: '$189',
-      stock: 0,
-      status: 'Out of Stock'
-    }
+  const mockUsers = [
+    { id: 1, name: 'John Doe', email: 'john@example.com', orders: 3, joined: '2024-01-15' },
+    { id: 2, name: 'Jane Smith', email: 'jane@example.com', orders: 1, joined: '2024-02-20' },
+    { id: 3, name: 'Bob Johnson', email: 'bob@example.com', orders: 2, joined: '2024-03-10' }
   ];
 
   return (
     <AdminLayout>
-      <div className="space-y-8">
-        {/* Header */}
-        <div className="flex justify-between items-center">
-          <div>
-            <h1 className="text-3xl font-playfair font-bold text-treen-900">Dashboard</h1>
-            <p className="text-treen-600">Welcome back! Here's what's happening with your store.</p>
-          </div>
-          <Button className="bg-treen-800 hover:bg-treen-900">
-            <Plus className="h-4 w-4 mr-2" />
-            Add Product
-          </Button>
+      <div className="space-y-6">
+        <div>
+          <h1 className="text-3xl font-playfair font-bold text-treen-900">Admin Dashboard</h1>
+          <p className="text-treen-600">Manage your Treen store</p>
         </div>
 
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {stats.map((stat, index) => (
-            <Card key={index} className="luxury-shadow">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-treen-600">{stat.title}</p>
-                    <p className="text-2xl font-bold text-treen-900">{stat.value}</p>
-                    <p className={`text-sm ${stat.changeType === 'positive' ? 'text-green-600' : 'text-red-600'}`}>
-                      {stat.change} from last month
-                    </p>
-                  </div>
-                  <div className="h-12 w-12 bg-treen-100 rounded-lg flex items-center justify-center">
-                    <stat.icon className="h-6 w-6 text-treen-600" />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-
-        {/* Main Content Tabs */}
-        <Tabs defaultValue="orders" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3 max-w-lg">
-            <TabsTrigger value="orders">Recent Orders</TabsTrigger>
+        <Tabs value={activeTab} onValueChange={setActiveTab}>
+          <TabsList className="grid w-full grid-cols-4">
+            <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="orders">Orders</TabsTrigger>
             <TabsTrigger value="products">Products</TabsTrigger>
             <TabsTrigger value="users">Users</TabsTrigger>
           </TabsList>
 
+          <TabsContent value="overview" className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">Total Orders</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-3xl font-bold text-treen-900">156</p>
+                  <p className="text-sm text-treen-600">+12% from last month</p>
+                </CardContent>
+              </Card>
+              
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">Revenue</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-3xl font-bold text-treen-900">$24,580</p>
+                  <p className="text-sm text-treen-600">+8% from last month</p>
+                </CardContent>
+              </Card>
+              
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">Active Users</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-3xl font-bold text-treen-900">89</p>
+                  <p className="text-sm text-treen-600">+15% from last month</p>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+
           <TabsContent value="orders" className="space-y-6">
-            <Card className="luxury-shadow">
-              <CardHeader>
-                <div className="flex justify-between items-center">
-                  <CardTitle className="text-xl font-playfair">Recent Orders</CardTitle>
-                  <Button variant="outline" size="sm">
-                    <Eye className="h-4 w-4 mr-2" />
-                    View All
-                  </Button>
+            <div className="flex justify-between items-center">
+              <h2 className="text-2xl font-playfair font-semibold">Orders Management</h2>
+              <Button className="bg-treen-800 hover:bg-treen-900">Add New Order</Button>
+            </div>
+            
+            <Card>
+              <CardContent className="p-0">
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead className="bg-treen-50">
+                      <tr>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-treen-700 uppercase">Order ID</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-treen-700 uppercase">Customer</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-treen-700 uppercase">Product</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-treen-700 uppercase">Amount</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-treen-700 uppercase">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-treen-200">
+                      {mockOrders.map((order) => (
+                        <tr key={order.id}>
+                          <td className="px-6 py-4 text-sm text-treen-900">#{order.id}</td>
+                          <td className="px-6 py-4 text-sm text-treen-900">{order.customer}</td>
+                          <td className="px-6 py-4 text-sm text-treen-900">{order.product}</td>
+                          <td className="px-6 py-4 text-sm text-treen-900">${order.amount}</td>
+                          <td className="px-6 py-4">
+                            <Badge variant={order.status === 'completed' ? 'default' : 'secondary'}>
+                              {order.status}
+                            </Badge>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
-              </CardHeader>
-              <CardContent>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Order ID</TableHead>
-                      <TableHead>Customer</TableHead>
-                      <TableHead>Product</TableHead>
-                      <TableHead>Amount</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead>Date</TableHead>
-                      <TableHead></TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {recentOrders.map((order) => (
-                      <TableRow key={order.id}>
-                        <TableCell className="font-medium">{order.id}</TableCell>
-                        <TableCell>{order.customer}</TableCell>
-                        <TableCell>{order.product}</TableCell>
-                        <TableCell>{order.amount}</TableCell>
-                        <TableCell>
-                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                            order.status === 'Delivered' ? 'bg-green-100 text-green-800' :
-                            order.status === 'Shipped' ? 'bg-blue-100 text-blue-800' :
-                            'bg-yellow-100 text-yellow-800'
-                          }`}>
-                            {order.status}
-                          </span>
-                        </TableCell>
-                        <TableCell>{order.date}</TableCell>
-                        <TableCell>
-                          <Button variant="ghost" size="sm">
-                            <MoreHorizontal className="h-4 w-4" />
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
               </CardContent>
             </Card>
           </TabsContent>
 
           <TabsContent value="products" className="space-y-6">
-            <Card className="luxury-shadow">
-              <CardHeader>
-                <div className="flex justify-between items-center">
-                  <CardTitle className="text-xl font-playfair">Product Management</CardTitle>
-                  <div className="flex gap-2">
-                    <div className="relative">
-                      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-treen-500 h-4 w-4" />
-                      <Input
-                        placeholder="Search products..."
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        className="pl-10 w-64"
-                      />
-                    </div>
-                    <Button variant="outline" size="icon">
-                      <Filter className="h-4 w-4" />
-                    </Button>
-                    <Button className="bg-treen-800 hover:bg-treen-900">
-                      <Plus className="h-4 w-4 mr-2" />
-                      Add Product
-                    </Button>
-                  </div>
+            <div className="flex justify-between items-center">
+              <h2 className="text-2xl font-playfair font-semibold">Products Management</h2>
+              <Button className="bg-treen-800 hover:bg-treen-900">Add New Product</Button>
+            </div>
+            
+            <Card>
+              <CardContent className="p-0">
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead className="bg-treen-50">
+                      <tr>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-treen-700 uppercase">ID</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-treen-700 uppercase">Name</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-treen-700 uppercase">Price</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-treen-700 uppercase">Stock</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-treen-700 uppercase">Category</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-treen-700 uppercase">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-treen-200">
+                      {mockProducts.map((product) => (
+                        <tr key={product.id}>
+                          <td className="px-6 py-4 text-sm text-treen-900">#{product.id}</td>
+                          <td className="px-6 py-4 text-sm text-treen-900">{product.name}</td>
+                          <td className="px-6 py-4 text-sm text-treen-900">${product.price}</td>
+                          <td className="px-6 py-4 text-sm text-treen-900">{product.stock}</td>
+                          <td className="px-6 py-4 text-sm text-treen-900">{product.category}</td>
+                          <td className="px-6 py-4 text-sm space-x-2">
+                            <Button variant="outline" size="sm">Edit</Button>
+                            <Button variant="outline" size="sm">Delete</Button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
-              </CardHeader>
-              <CardContent>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Product Name</TableHead>
-                      <TableHead>Category</TableHead>
-                      <TableHead>Price</TableHead>
-                      <TableHead>Stock</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead>Actions</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {products.map((product) => (
-                      <TableRow key={product.id}>
-                        <TableCell className="font-medium">{product.name}</TableCell>
-                        <TableCell>{product.category}</TableCell>
-                        <TableCell>{product.price}</TableCell>
-                        <TableCell>{product.stock}</TableCell>
-                        <TableCell>
-                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                            product.status === 'Active' ? 'bg-green-100 text-green-800' :
-                            'bg-red-100 text-red-800'
-                          }`}>
-                            {product.status}
-                          </span>
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex gap-2">
-                            <Button variant="ghost" size="sm">
-                              <Eye className="h-4 w-4" />
-                            </Button>
-                            <Button variant="ghost" size="sm">
-                              <Edit className="h-4 w-4" />
-                            </Button>
-                            <Button variant="ghost" size="sm">
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
               </CardContent>
             </Card>
           </TabsContent>
 
           <TabsContent value="users" className="space-y-6">
-            <Card className="luxury-shadow">
-              <CardHeader>
-                <CardTitle className="text-xl font-playfair">User Management</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-center py-8 text-treen-600">
-                  User management functionality coming soon...
+            <div className="flex justify-between items-center">
+              <h2 className="text-2xl font-playfair font-semibold">Users Management</h2>
+              <div className="flex gap-2">
+                <Input placeholder="Search users..." className="w-64" />
+                <Button className="bg-treen-800 hover:bg-treen-900">Search</Button>
+              </div>
+            </div>
+            
+            <Card>
+              <CardContent className="p-0">
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead className="bg-treen-50">
+                      <tr>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-treen-700 uppercase">ID</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-treen-700 uppercase">Name</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-treen-700 uppercase">Email</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-treen-700 uppercase">Orders</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-treen-700 uppercase">Joined</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-treen-700 uppercase">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-treen-200">
+                      {mockUsers.map((user) => (
+                        <tr key={user.id}>
+                          <td className="px-6 py-4 text-sm text-treen-900">#{user.id}</td>
+                          <td className="px-6 py-4 text-sm text-treen-900">{user.name}</td>
+                          <td className="px-6 py-4 text-sm text-treen-900">{user.email}</td>
+                          <td className="px-6 py-4 text-sm text-treen-900">{user.orders}</td>
+                          <td className="px-6 py-4 text-sm text-treen-900">{user.joined}</td>
+                          <td className="px-6 py-4 text-sm space-x-2">
+                            <Button variant="outline" size="sm">View</Button>
+                            <Button variant="outline" size="sm">Edit</Button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
               </CardContent>
             </Card>
