@@ -26,66 +26,63 @@ const Navigation = () => {
 
   return (
     <>
-      <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-lg border-b border-gray-100 shadow-sm">
+      <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-200 shadow-lg">
         <div className="container mx-auto px-4">
-          {/* Main Navigation Row */}
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
-            <div className="flex-shrink-0">
-              <Link to="/" className="flex items-center">
-                <h1 className="text-2xl font-playfair font-bold text-treen-800 hover:text-treen-900 transition-colors">
-                  Treen
-                </h1>
-              </Link>
-            </div>
+            <Link to="/" className="flex-shrink-0">
+              <h1 className="text-3xl font-playfair font-bold text-treen-800 hover:text-treen-900 transition-colors">
+                Treen
+              </h1>
+            </Link>
 
-            {/* Desktop Navigation Menu */}
-            <div className="hidden lg:flex items-center space-x-8">
+            {/* Desktop Navigation */}
+            <nav className="hidden lg:flex items-center space-x-8">
               {menuItems.map((item) => (
                 <Link
                   key={item.name}
                   to={item.href}
-                  className="text-gray-700 hover:text-treen-800 transition-colors duration-200 font-medium text-sm relative group"
+                  className="text-gray-700 hover:text-treen-800 font-medium text-sm transition-colors duration-200 relative group py-2"
                 >
                   {item.name}
-                  <span className="absolute inset-x-0 -bottom-1 h-0.5 bg-treen-800 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-200" />
+                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-treen-800 transition-all duration-200 group-hover:w-full" />
                 </Link>
               ))}
-            </div>
+            </nav>
 
-            {/* Search Bar - Desktop */}
-            <div className="hidden md:flex items-center flex-1 max-w-sm mx-8">
+            {/* Search Bar */}
+            <div className="hidden md:flex flex-1 max-w-md mx-8">
               <div className="relative w-full">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
                 <Input
                   placeholder="Search products..."
-                  className="pl-10 h-10 bg-gray-50 border-gray-200 focus:border-treen-400 focus:bg-white transition-all duration-200 rounded-full"
+                  className="pl-10 h-10 bg-gray-50 border-gray-200 focus:border-treen-500 focus:ring-2 focus:ring-treen-200 transition-all duration-200 rounded-lg"
                 />
               </div>
             </div>
 
             {/* Action Buttons */}
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-3">
               {/* User Menu */}
               {user ? (
                 <Popover>
                   <PopoverTrigger asChild>
-                    <Button variant="ghost" className="h-10 px-3 text-gray-700 hover:text-treen-800 hover:bg-treen-50 rounded-full">
+                    <Button variant="ghost" className="h-10 px-3 text-gray-700 hover:text-treen-800 hover:bg-treen-50">
                       <User className="h-4 w-4 mr-2" />
-                      <span className="hidden sm:inline">{user.name.split(' ')[0]}</span>
+                      <span className="hidden sm:inline font-medium">{user.name.split(' ')[0]}</span>
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent className="w-48 p-2" align="end">
                     <div className="space-y-1">
                       <Link to="/orders" className="block">
-                        <Button variant="ghost" className="w-full justify-start h-10 text-left">
+                        <Button variant="ghost" className="w-full justify-start h-9 text-left font-medium">
                           My Orders
                         </Button>
                       </Link>
                       <Button 
                         variant="ghost" 
                         onClick={logout}
-                        className="w-full justify-start h-10 text-red-600 hover:text-red-700 hover:bg-red-50"
+                        className="w-full justify-start h-9 text-red-600 hover:text-red-700 hover:bg-red-50 font-medium"
                       >
                         <LogOut className="h-4 w-4 mr-2" />
                         Logout
@@ -95,9 +92,9 @@ const Navigation = () => {
                 </Popover>
               ) : (
                 <Button 
-                  variant="ghost" 
+                  variant="outline" 
                   onClick={() => setIsLoginOpen(true)}
-                  className="h-10 px-3 text-gray-700 hover:text-treen-800 hover:bg-treen-50 rounded-full"
+                  className="h-10 px-4 border-treen-300 text-treen-800 hover:bg-treen-800 hover:text-white transition-all duration-200"
                 >
                   <User className="h-4 w-4 mr-2" />
                   <span className="hidden sm:inline">Login</span>
@@ -106,13 +103,13 @@ const Navigation = () => {
               
               {/* Cart Button */}
               <Button 
-                variant="ghost" 
+                variant="outline" 
                 onClick={() => setIsCartOpen(true)}
-                className="h-10 w-10 text-gray-700 hover:text-treen-800 hover:bg-treen-50 relative rounded-full p-0"
+                className="h-10 w-10 p-0 border-treen-300 text-treen-800 hover:bg-treen-800 hover:text-white relative transition-all duration-200"
               >
                 <ShoppingCart className="h-4 w-4" />
                 {getTotalItems() > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-treen-800 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-medium">
+                  <span className="absolute -top-2 -right-2 bg-treen-bronze text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
                     {getTotalItems()}
                   </span>
                 )}
@@ -121,45 +118,43 @@ const Navigation = () => {
               {/* Mobile Menu Button */}
               <Button
                 variant="ghost"
-                className="lg:hidden h-10 w-10 text-gray-700 hover:text-treen-800 hover:bg-treen-50 rounded-full p-0"
+                className="lg:hidden h-10 w-10 p-0 text-gray-700 hover:text-treen-800 hover:bg-treen-50"
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
               >
-                {isMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+                {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
               </Button>
             </div>
           </div>
 
           {/* Mobile Menu */}
           {isMenuOpen && (
-            <div className="lg:hidden border-t border-gray-100 py-4 animate-in slide-in-from-top-2 duration-200">
-              <div className="flex flex-col space-y-4">
-                {/* Mobile Search */}
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-                  <Input
-                    placeholder="Search products..."
-                    className="pl-10 h-10 bg-gray-50 border-gray-200 focus:border-treen-400 rounded-full"
-                  />
-                </div>
-                
-                {/* Mobile Navigation Links */}
-                <div className="grid grid-cols-2 gap-2">
-                  {menuItems.map((item) => (
-                    <Link
-                      key={item.name}
-                      to={item.href}
-                      className="text-gray-700 hover:text-treen-800 hover:bg-treen-50 py-3 px-4 rounded-lg font-medium transition-colors text-center"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      {item.name}
-                    </Link>
-                  ))}
-                </div>
+            <div className="lg:hidden border-t border-gray-200 py-4 bg-white/95 backdrop-blur-sm">
+              {/* Mobile Search */}
+              <div className="relative mb-4">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                <Input
+                  placeholder="Search products..."
+                  className="pl-10 h-10 bg-gray-50 border-gray-200 focus:border-treen-500 rounded-lg"
+                />
+              </div>
+              
+              {/* Mobile Navigation Links */}
+              <div className="space-y-2">
+                {menuItems.map((item) => (
+                  <Link
+                    key={item.name}
+                    to={item.href}
+                    className="block text-gray-700 hover:text-treen-800 hover:bg-treen-50 py-3 px-4 rounded-lg font-medium transition-colors"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    {item.name}
+                  </Link>
+                ))}
               </div>
             </div>
           )}
         </div>
-      </nav>
+      </header>
 
       <LoginModal 
         isOpen={isLoginOpen} 

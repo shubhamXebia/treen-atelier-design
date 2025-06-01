@@ -62,14 +62,14 @@ const ProductCard = ({ product, viewMode }: ProductCardProps) => {
                     <Button
                       size="sm"
                       onClick={handleQuickView}
-                      className="h-8 w-8 p-0 bg-white text-treen-800 hover:bg-treen-50"
+                      className="h-8 w-8 p-0 bg-white text-treen-800 hover:bg-treen-50 rounded-full"
                     >
                       <Eye className="h-3 w-3" />
                     </Button>
                     <Button
                       size="sm"
                       onClick={handleAddToCart}
-                      className="h-8 w-8 p-0 bg-treen-800 hover:bg-treen-900"
+                      className="h-8 w-8 p-0 bg-treen-800 hover:bg-treen-900 rounded-full"
                     >
                       <ShoppingCart className="h-3 w-3" />
                     </Button>
