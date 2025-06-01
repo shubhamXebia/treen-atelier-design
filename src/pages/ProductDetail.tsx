@@ -5,9 +5,11 @@ import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { useCart } from '@/context/CartContext';
 
 const ProductDetail = () => {
   const { id } = useParams();
+  const { addToCart } = useCart();
 
   // Mock product data - in a real app, this would come from an API
   const product = {
@@ -32,6 +34,10 @@ const ProductDetail = () => {
       width: '36 inches',
       height: '30 inches'
     }
+  };
+
+  const handleAddToCart = () => {
+    addToCart(product);
   };
 
   return (
@@ -135,7 +141,8 @@ const ProductDetail = () => {
             <div className="flex gap-4">
               <Button 
                 size="lg" 
-                className="flex-1 bg-treen-800 hover:bg-treen-900 text-white"
+                onClick={handleAddToCart}
+                className="flex-1 h-12 bg-treen-800 hover:bg-treen-900 text-white"
               >
                 <ShoppingCart className="h-5 w-5 mr-2" />
                 Add to Cart
@@ -143,7 +150,7 @@ const ProductDetail = () => {
               <Button 
                 variant="outline" 
                 size="lg"
-                className="border-treen-600 text-treen-800 hover:bg-treen-800 hover:text-white"
+                className="h-12 w-12 p-0 border-treen-600 text-treen-800 hover:bg-treen-800 hover:text-white"
               >
                 <Heart className="h-5 w-5" />
               </Button>

@@ -110,7 +110,7 @@ const Products = () => {
                   placeholder="Search products..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10"
+                  className="pl-10 h-10"
                 />
               </div>
             </div>
@@ -118,7 +118,7 @@ const Products = () => {
             <div className="space-y-2">
               <label className="text-sm font-medium text-treen-700">Category</label>
               <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-                <SelectTrigger>
+                <SelectTrigger className="h-10">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -134,7 +134,7 @@ const Products = () => {
             <div className="space-y-2">
               <label className="text-sm font-medium text-treen-700">Sort By</label>
               <Select value={sortBy} onValueChange={setSortBy}>
-                <SelectTrigger>
+                <SelectTrigger className="h-10">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -149,15 +149,17 @@ const Products = () => {
             <div className="flex gap-2">
               <Button
                 variant={viewMode === 'grid' ? 'default' : 'outline'}
-                size="icon"
+                size="sm"
                 onClick={() => setViewMode('grid')}
+                className="h-10 w-10 p-0"
               >
                 <Grid className="h-4 w-4" />
               </Button>
               <Button
                 variant={viewMode === 'list' ? 'default' : 'outline'}
-                size="icon"
+                size="sm"
                 onClick={() => setViewMode('list')}
+                className="h-10 w-10 p-0"
               >
                 <List className="h-4 w-4" />
               </Button>
