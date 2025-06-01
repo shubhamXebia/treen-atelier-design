@@ -2,7 +2,6 @@
 import { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { useCart } from '@/context/CartContext';
 import { useUser } from '@/context/UserContext';
 import { Minus, Plus, Trash2 } from 'lucide-react';
@@ -10,17 +9,18 @@ import { Minus, Plus, Trash2 } from 'lucide-react';
 interface CartModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onLoginRequired: () => void;
 }
 
-const CartModal = ({ isOpen, onClose }: CartModalProps) => {
+const CartModal = ({ isOpen, onClose, onLoginRequired }: CartModalProps) => {
   const { items, updateQuantity, removeFromCart, clearCart, getTotalPrice } = useCart();
   const { user, addOrder } = useUser();
-  const [showCheckout, setShowCheckout] = useState(false);
   const [orderPlaced, setOrderPlaced] = useState(false);
 
   const handleCheckout = () => {
     if (!user) {
-      alert('Please login to place an order');
+      onClose();
+      onLoginRequired();
       return;
     }
     
@@ -73,7 +73,7 @@ const CartModal = ({ isOpen, onClose }: CartModalProps) => {
         {items.length === 0 ? (
           <div className="text-center py-8">
             <p className="text-treen-600 mb-4">Your cart is empty</p>
-            <Button onClick={onClose} className="h-12 bg-treen-800 hover:bg-treen-900">
+            <Button onClick={onClose} className="h-10 bg-treen-800 hover:bg-treen-900">
               Continue Shopping
             </Button>
           </div>
@@ -123,7 +123,7 @@ const CartModal = ({ isOpen, onClose }: CartModalProps) => {
               </div>
               <Button 
                 onClick={handleCheckout}
-                className="w-full h-12 bg-treen-800 hover:bg-treen-900"
+                className="w-full h-10 bg-treen-800 hover:bg-treen-900"
               >
                 Place Order
               </Button>
